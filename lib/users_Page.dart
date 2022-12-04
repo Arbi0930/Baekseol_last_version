@@ -6,9 +6,14 @@ import 'package:http/http.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lapp/api%20&%20bloc/api_controller.dart';
 
 class UserPage extends StatefulWidget {
-  const UserPage({super.key});
+  final String? userName;
+  UserPage({
+    Key? key,
+    this.userName,
+  }) : super(key: key);
 
   @override
   State<UserPage> createState() => _UserPageState();
@@ -16,8 +21,17 @@ class UserPage extends StatefulWidget {
 
 class _UserPageState extends State<UserPage> {
   final _UserFormKey = GlobalKey<FormState>();
-  void _checkButton() {
-    if (_UserFormKey.currentState!.validate()) {}
+  _checkButton() {
+    if (_UserFormKey.currentState!.validate()) {
+      var isValid = ApiManager.checkUserValidate();
+      if (isValid != false) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Hereglegch bvrtgeltei bna "),
+          ),
+        );
+      }
+    }
   }
 
   void _registerButton() {
@@ -50,7 +64,7 @@ class _UserPageState extends State<UserPage> {
               Padding(
                 padding: const EdgeInsets.only(right: 78.0),
                 child: Text(
-                  'Бат',
+                  "${widget.userName}",
                   style: TextStyle(
                     backgroundColor: Color.fromARGB(255, 253, 255, 217),
                     color: Colors.black,
@@ -70,8 +84,7 @@ class _UserPageState extends State<UserPage> {
             elevation: MaterialStatePropertyAll<double>(0),
           ),
           onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => HomePage()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
           },
           child: FaIcon(
             FontAwesomeIcons.arrowLeft,
@@ -128,8 +141,7 @@ class _UserPageState extends State<UserPage> {
                                 },
                                 decoration: InputDecoration(
                                   label: Text("Утасны дугаар"),
-                                  labelStyle:
-                                      TextStyle(fontWeight: FontWeight.bold),
+                                  labelStyle: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                                 keyboardType: TextInputType.number,
                                 maxLength: 8,
@@ -144,19 +156,14 @@ class _UserPageState extends State<UserPage> {
                             height: 77,
                             child: Container(
                               decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.redAccent),
-                                  color: Color(0xffB0ECFF),
-                                  borderRadius: BorderRadius.circular(20)),
+                                  border: Border.all(color: Colors.redAccent), color: Color(0xffB0ECFF), borderRadius: BorderRadius.circular(20)),
                               child: Padding(
                                 padding: const EdgeInsets.all(4.0),
                                 child: ElevatedButton(
                                   style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Color(0xffB0ECFF)),
-                                    foregroundColor:
-                                        MaterialStateProperty.all(Colors.black),
-                                    elevation:
-                                        MaterialStateProperty.all<double>(0),
+                                    backgroundColor: MaterialStateProperty.all(Color(0xffB0ECFF)),
+                                    foregroundColor: MaterialStateProperty.all(Colors.black),
+                                    elevation: MaterialStateProperty.all<double>(0),
                                   ),
                                   onPressed: _checkButton,
                                   child: Text(
@@ -177,10 +184,8 @@ class _UserPageState extends State<UserPage> {
                       padding: const EdgeInsets.all(16.0),
                       child: Container(
                         padding: EdgeInsets.only(left: 16, right: 16),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: Colors.white),
-                            borderRadius: BorderRadius.circular(20)),
+                        decoration:
+                            BoxDecoration(color: Colors.white, border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(20)),
                         child: TextFormField(
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -201,10 +206,8 @@ class _UserPageState extends State<UserPage> {
                       padding: const EdgeInsets.all(16.0),
                       child: Container(
                         padding: EdgeInsets.only(left: 16, right: 16),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: Colors.white),
-                            borderRadius: BorderRadius.circular(20)),
+                        decoration:
+                            BoxDecoration(color: Colors.white, border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(20)),
                         child: TextFormField(
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -225,10 +228,8 @@ class _UserPageState extends State<UserPage> {
                       padding: const EdgeInsets.all(16.0),
                       child: Container(
                         padding: EdgeInsets.only(left: 16, right: 16),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: Colors.white),
-                            borderRadius: BorderRadius.circular(20)),
+                        decoration:
+                            BoxDecoration(color: Colors.white, border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(20)),
                         child: TextFormField(
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -249,8 +250,7 @@ class _UserPageState extends State<UserPage> {
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Container(
-                        padding: EdgeInsets.only(
-                            left: 60, right: 60, top: 10, bottom: 10),
+                        padding: EdgeInsets.only(left: 60, right: 60, top: 10, bottom: 10),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           border: Border.all(
@@ -261,10 +261,8 @@ class _UserPageState extends State<UserPage> {
                         child: ElevatedButton(
                           style: ButtonStyle(
                             elevation: MaterialStateProperty.all<double>(0),
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.white),
-                            foregroundColor:
-                                MaterialStateProperty.all(Colors.black),
+                            backgroundColor: MaterialStateProperty.all(Colors.white),
+                            foregroundColor: MaterialStateProperty.all(Colors.black),
                           ),
                           onPressed: _registerButton,
                           child: Text(

@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lapp/Bproduct.dart';
 import 'package:lapp/Login_page.dart';
 import 'package:lapp/Product.dart';
+import 'package:lapp/api%20&%20bloc/api_controller.dart';
 import 'package:lapp/users_Page.dart';
 import 'package:http/http.dart';
 import 'dart:async';
@@ -13,40 +14,51 @@ import 'dart:convert';
 import 'models/userInfo.dart';
 import 'models/login.dart';
 
-Future<void> main() async {
-  await SystemChrome.setPreferredOrientations(
-    [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
-  );
-  await SystemChrome.setPreferredOrientations(
-    [],
-  );
-  runApp(
-    MaterialApp(
-      home: HomePage(),
-    ),
-  );
-}
+// Future<void> main() async {
+//   await SystemChrome.setPreferredOrientations(
+//     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
+//   );
+//   await SystemChrome.setPreferredOrientations(
+//     [],
+//   );
+//   runApp(
+//     MaterialApp(
+//       home: HomePage(),
+//     ),
+//   );
+// }
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  HomePage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  Userinfo? data = Userinfo();
   @override
   void initState() {
-    var map = new Map<String, dynamic>();
-    map['last_name'] = '';
     super.initState();
+    WidgetsFlutterBinding.ensureInitialized();
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_) {});
+    _getUserData();
+  }
+
+  _getUserData() async {
+    data = await ApiManager.getUserData();
+    setState(() {});
   }
 
   void Product() {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => BorluulagchProduct(),
+        builder: (context) => BorluulagchProduct(
+          userName: "${data?.result?.firstName}",
+        ),
       ),
     );
   }
@@ -55,7 +67,9 @@ class _HomePageState extends State<HomePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => UserPage(),
+        builder: (context) => UserPage(
+          userName: data?.result?.firstName,
+        ),
       ),
     );
   }
@@ -69,7 +83,11 @@ class _HomePageState extends State<HomePage> {
 
   void _Product() {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => ProductPage()));
+        context,
+        MaterialPageRoute(
+            builder: (context) => ProductPage(
+                  userName: data?.result?.firstName,
+                )));
   }
 
   @override
@@ -90,19 +108,29 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.only(top: 28.0, left: 8),
-          child: Text(
-            'Бат',
-            style: TextStyle(
-              backgroundColor: Color.fromARGB(255, 253, 255, 217),
-              color: Colors.black,
-              fontSize: 26,
-              fontWeight: FontWeight.bold,
-            ),
+        // leading: Padding(
+        //     padding: const EdgeInsets.only(top: 28.0, left: 8),
+        //     child: Text(
+        //       data?.result?.firstName ?? '',
+        //       style: const TextStyle(
+        //         backgroundColor: Color.fromARGB(255, 253, 255, 217),
+        //         color: Colors.black,
+        //         fontSize: 26,
+        //         fontWeight: FontWeight.bold,
+        //       ),
+        //     )),
+
+        title: Text(
+          data?.result?.firstName ?? '',
+          style: const TextStyle(
+            backgroundColor: Color.fromARGB(255, 253, 255, 217),
+            color: Colors.black,
+            fontSize: 26,
+            fontWeight: FontWeight.bold,
           ),
         ),
         elevation: 0,
+        centerTitle: false,
         automaticallyImplyLeading: false,
         toolbarHeight: 90,
         backgroundColor: Color.fromARGB(255, 253, 255, 217),
@@ -152,8 +180,7 @@ class _HomePageState extends State<HomePage> {
                                 width: 173,
                                 child: ElevatedButton(
                                   style: ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStateProperty.all(Colors.white),
+                                    backgroundColor: MaterialStateProperty.all(Colors.white),
                                     foregroundColor: MaterialStateProperty.all(
                                       Color(0xffED5E92),
                                     ),
@@ -192,8 +219,7 @@ class _HomePageState extends State<HomePage> {
                                 width: 173,
                                 child: ElevatedButton(
                                   style: ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStateProperty.all(Colors.white),
+                                    backgroundColor: MaterialStateProperty.all(Colors.white),
                                     foregroundColor: MaterialStateProperty.all(
                                       Color(0xff9BF862),
                                     ),
@@ -232,8 +258,7 @@ class _HomePageState extends State<HomePage> {
                               width: 173,
                               child: ElevatedButton(
                                 style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all(Colors.white),
+                                  backgroundColor: MaterialStateProperty.all(Colors.white),
                                   foregroundColor: MaterialStateProperty.all(
                                     Color(0xffD9D5F7),
                                   ),
@@ -269,10 +294,8 @@ class _HomePageState extends State<HomePage> {
                               width: 173,
                               child: ElevatedButton(
                                 style: ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStateProperty.all(Colors.white),
-                                    foregroundColor: MaterialStateProperty.all(
-                                        Color(0xffB8D9EC))),
+                                    backgroundColor: MaterialStateProperty.all(Colors.white),
+                                    foregroundColor: MaterialStateProperty.all(Color(0xffB8D9EC))),
                                 onPressed: _LogOut,
                                 child: Column(
                                   children: [

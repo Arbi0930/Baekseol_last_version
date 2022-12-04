@@ -5,15 +5,19 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:lapp/Home_page.dart';
 import 'package:lapp/api%20&%20bloc/api_controller.dart';
+import 'package:lapp/api%20&%20bloc/api_helper.dart';
 
 import 'package:lapp/jolooch_home.dart';
 import 'package:http/http.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  LoginPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -31,26 +35,23 @@ class _LoginPageState extends State<LoginPage> {
       map['phone'] = LoginName.text;
       map['password'] = _LoginPass.text;
       var response = await ApiManager.login(map);
+
       if (ajiltan == AjiltanEnum.Borluulagch) {
         if (response.role == 'seller') {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => HomePage()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(
-                  "Нэвтэрч чадсангүй нууц үг нэвтрэх нэрээ шалгаад дахин оролдоно уу"),
+              content: Text("Нэвтэрч чадсангүй нууц үг нэвтрэх нэрээ шалгаад дахин оролдоно уу"),
             ),
           );
         }
       } else if (response.role == 'delivery') {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => JoloochPage()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => JoloochPage()));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-                "Нэвтэрч чадсангүй нууц үг нэвтрэх нэрээ шалгаад дахин оролдоно уу"),
+            content: Text("Нэвтэрч чадсангүй нууц үг нэвтрэх нэрээ шалгаад дахин оролдоно уу"),
           ),
         );
       }
@@ -65,8 +66,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('images/background.jpg'), fit: BoxFit.fitWidth),
+          image: DecorationImage(image: AssetImage('images/background.jpg'), fit: BoxFit.fitWidth),
         ),
         child: SafeArea(
           child: Form(
@@ -98,15 +98,14 @@ class _LoginPageState extends State<LoginPage> {
                               onChanged: ((value) {
                                 if (value != null)
                                   setState(() {
-                                    ajiltan = value;
+                                    // ajiltan = value;
                                   });
                               }),
                             ),
                           ),
                           Text(
                             "Борлуулагч",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -120,14 +119,13 @@ class _LoginPageState extends State<LoginPage> {
                                 onChanged: ((value) {
                                   if (value != null)
                                     setState(() {
-                                      ajiltan = value;
+                                      // ajiltan = value;
                                     });
                                 })),
                           ),
                           Text(
                             "Жолооч",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -137,10 +135,8 @@ class _LoginPageState extends State<LoginPage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 50),
                         child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: Colors.white),
-                              borderRadius: BorderRadius.circular(30)),
+                          decoration:
+                              BoxDecoration(color: Colors.white, border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(30)),
                           child: Padding(
                             padding: const EdgeInsets.only(left: 20.0),
                             child: TextFormField(
@@ -153,10 +149,7 @@ class _LoginPageState extends State<LoginPage> {
                               },
                               decoration: InputDecoration(
                                   labelText: "Нэвтрэх нэр",
-                                  labelStyle: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold),
+                                  labelStyle: TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold),
                                   border: InputBorder.none),
                             ),
                           ),
@@ -168,10 +161,8 @@ class _LoginPageState extends State<LoginPage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 50),
                         child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: Colors.white),
-                              borderRadius: BorderRadius.circular(30)),
+                          decoration:
+                              BoxDecoration(color: Colors.white, border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(30)),
                           child: Padding(
                             padding: const EdgeInsets.only(left: 20.0),
                             child: TextFormField(
@@ -184,10 +175,7 @@ class _LoginPageState extends State<LoginPage> {
                               },
                               decoration: InputDecoration(
                                 labelText: "Нууц үг",
-                                labelStyle: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
+                                labelStyle: TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold),
                                 border: InputBorder.none,
                               ),
                               obscureText: true,
@@ -203,25 +191,20 @@ class _LoginPageState extends State<LoginPage> {
                         child: Container(
                           padding: EdgeInsets.all(10),
 
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: Colors.white),
-                              borderRadius: BorderRadius.circular(30)),
+                          decoration:
+                              BoxDecoration(color: Colors.white, border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(30)),
 
                           child: SizedBox(
                             width: 350,
                             child: ElevatedButton(
                               style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all(Colors.white),
-                                  foregroundColor:
-                                      MaterialStateProperty.all(Colors.black),
+                                  backgroundColor: MaterialStateProperty.all(Colors.white),
+                                  foregroundColor: MaterialStateProperty.all(Colors.black),
                                   elevation: MaterialStateProperty.all(0)),
                               onPressed: OnSubmit,
                               child: Text(
                                 "Нэвтрэх",
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),
@@ -244,7 +227,4 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-enum AjiltanEnum {
-  Borluulagch,
-  Hurgegch;
-}
+enum AjiltanEnum { Borluulagch, Hurgegch }
